@@ -1,0 +1,24 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
+build.doLast {
+    println "The Android SDK is in ${sdk}"
+    exec {
+        workingDir "${projectDir}/build/libs/"
+        commandLine "${sdk}/dx"             \
+        , "--dex"             \
+        , "--output=${projectDir}/build/libs/anotherthing.dex"             \
+        , "${projectDir}/build/libs/anotherthing.jar"
+    }
+
+    copy {
+        from "${projectDir}/build/libs/anotherthing.dex"
+        into "../app/src/main/res/raw/"
+    }
+}
